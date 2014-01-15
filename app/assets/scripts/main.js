@@ -2,7 +2,7 @@
  * Copyright (c) 2014 Fuse Elements, LLC. All rights reserved.
  */
 
-/*global require:false, requirejs:false */
+/* global require:false, requirejs:false */
 
 "use strict";
 
@@ -10,7 +10,7 @@ requirejs.config({
   baseUrl: "scripts/modules",
   paths: {
     ember: window.ENV && window.ENV.DEVELOPMENT ? "../ember" : "../ember.min",
-    handlebars: window.ENV && window.ENV.DEVELOPMENT ? "../handlebars" : "../handlebars.runtime",
+    handlebars: window.ENV && window.ENV.DEVELOPMENT ? "../handlebars" : "../handlebars.runtime.min",
     jquery: "//code.jquery.com/jquery-2.0.3.min"
   },
   shim: {
