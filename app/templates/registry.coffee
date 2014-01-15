@@ -4,6 +4,4 @@
 
 # Register your templates below.
 
-`import "./about"`
-`import "./application"`
-`import "./components/x-foo"`
+define ["./about", "./application", "./components/x-foo"], ->

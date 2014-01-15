@@ -5,13 +5,14 @@
 #
 # Create the Ember application instance.
 #
-App = Ember.Application.create
-  # LOG_TRANSITIONS: window.ENV && window.ENV.DEVELOPMENT
-  LOG_TRANSITIONS_INTERNAL: window.ENV && window.ENV.DEVELOPMENT
+define ->
+  App = Ember.Application.create
+    # LOG_TRANSITIONS: window.ENV && window.ENV.DEVELOPMENT
+    LOG_TRANSITIONS_INTERNAL: window.ENV && window.ENV.DEVELOPMENT
 
-#
-# Postpone booting the app. See scripts/main.js.
-#
-App.deferReadiness()
+  #
+  # Postpone booting the app. See scripts/main.js.
+  #
+  App.deferReadiness()
 
-`export default = App`
+  App

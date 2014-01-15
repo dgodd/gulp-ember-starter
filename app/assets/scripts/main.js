@@ -2,7 +2,9 @@
  * Copyright (c) 2014 Fuse Elements, LLC. All rights reserved.
  */
 
-/* global require requirejs */
+/*global require:false, requirejs:false */
+
+"use strict";
 
 requirejs.config({
   baseUrl: "scripts/modules",
@@ -34,6 +36,6 @@ requirejs.config({
 require(["ember"], function () {
   require(["app", "initialize"], function (app) {
     // Resume booting the app.
-    app["default"].advanceReadiness();
+    app.advanceReadiness();
   });
 });

@@ -12,11 +12,10 @@ coffee = require "gulp-coffee"
 concat = require "gulp-concat"
 gutil = require "gulp-util"
 handlebars = require "gulp-ember-handlebars"
+rimraf = require "gulp-rimraf"
 stylus = require "gulp-stylus"
-transpiler = require "gulp-es6-module-transpiler"
 watch = require "gulp-watch"
 # gulp-requirejs
-# gulp-rimraf
 # gulp-uglify
 
 
@@ -40,7 +39,6 @@ gulp.task "assets", ->
 gulp.task "modules", ->
   gulp.src([modulesPattern])
     .pipe(coffee(bare: true).on("error", gutil.log))
-    .pipe(transpiler(type: "amd"))
     # .pipe(concat("scripts.js"))
     .pipe(gulp.dest("dist/scripts/modules"))
 
@@ -67,6 +65,10 @@ gulp.task "templates", ->
 gulp.task "vendor", ->
   gulp.src(vendorPattern)
     .pipe(gulp.dest("dist"))
+
+gulp.task "clean", ->
+  gulp.src("dist")
+    .pipe(rimraf())
 
 
 #
