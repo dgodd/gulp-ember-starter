@@ -1,0 +1,25 @@
+{
+  "name": "ember-gulp-skeleton",
+  "version": "0.1.0",
+  "description": "Is an Ember.js skeleton project for use with the gulp.js build tool.",
+  "author": "Jon Buffington",
+  "scripts": {
+    "start": "gulp --require coffee-script",
+    "templates": "gulp --require coffee-script templates"
+  },
+  "dependencies": {
+    "gulp": "~3.3.0",
+    "coffee-script": "~1.6.3",
+    "connect": "~2.12.0",
+    "nib": "~1.0.2"
+  },
+  "devDependencies": {
+    "gulp-coffee": "1.2.5",
+    "gulp-concat": "~2.1.7",
+    "gulp-ember-handlebars": "*",
+    "gulp-es6-module-transpiler": "~0.0.0",
+    "gulp-util": "~2.2.9",
+    "gulp-stylus": "~0.0.9",
+    "gulp-watch": "~0.3.4"
+  }
+}
