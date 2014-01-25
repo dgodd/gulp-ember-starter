@@ -9,7 +9,7 @@
     "templates": "gulp --require coffee-script templates"
   },
   "dependencies": {
-    "gulp": "3",
+    "gulp": "~3.5",
     "coffee-script": "1",
     "connect": "2",
     "nib": "1"

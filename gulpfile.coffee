@@ -74,17 +74,8 @@ gulp.task "clean", ->
 #
 # The default task boots the development enviroment.
 #
-gulp.task "default", ->
-  gulp.run "assets", "modules", "server", "styles", "templates", "vendor"
-
-  gulp.watch assetsPattern, ->
-    gulp.run "assets"
-
-  gulp.watch modulesPattern, ->
-    gulp.run "modules"
-
-  gulp.watch stylesPattern, ->
-    gulp.run "styles"
-
-  gulp.watch templatesPattern, ->
-    gulp.run "templates"
+gulp.task "default", ["assets", "modules", "styles", "templates", "vendor", "server"], ->
+  gulp.watch assetsPattern, ["assets"]
+  gulp.watch modulesPattern, ["modules"]
+  gulp.watch stylesPattern, ["styles"]
+  gulp.watch templatesPattern, ["templates"]
