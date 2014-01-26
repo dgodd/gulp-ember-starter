@@ -7,7 +7,7 @@
     "clean": "gulp --require coffee-script clean",
     "start": "gulp --require coffee-script",
     "register": "gulp --require coffee-script register",
-    "templates": "gulp --require coffee-script templates"
+    "prepublish": "gulp --require coffee-script --cwd support"
   },
   "dependencies": {
     "gulp": "~3.5",
