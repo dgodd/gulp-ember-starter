@@ -20,6 +20,7 @@
     "gulp-rimraf": "~0.0.8",
     "gulp-stylus": "~0.0.9",
     "gulp-util": "~2.2.9",
-    "gulp-watch": "~0.3.4"
+    "gulp-watch": "~0.3.4",
+    "vinyl": "~0.2.3"
   }
 }

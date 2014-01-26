@@ -4,7 +4,7 @@
 
 path = require "path"
 stream = require "stream"
-File = require("gulp-util").File # TODO require "vinyl" instead.
+File = require("vinyl")
 
   	
 #
