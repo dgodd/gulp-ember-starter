@@ -3,6 +3,9 @@
 #
 
 gulp = require "gulp"
+path = require "path"
+through2 = require("through2")
+
 
 #
 # Plugins
@@ -25,9 +28,52 @@ watch = require "gulp-watch"
 assetsPattern = "app/assets/**"
 modulesPattern = "app/**/*.coffee"
 stylesPattern = "app/**/*.styl"
-templatesPattern = "app/templates/**/*.hbs"
+templatesSrc = "app/templates/**/*.hbs"
+templatesDest = "dist/scripts/modules/templates"
 vendorPattern = "vendor/**"
 
+
+#
+# Create registry.js files using a gulp plugin (register).
+#
+afterDir = (p, dir) ->
+  ps = p.split path.sep
+  i = ps.lastIndexOf(dir) + 1
+  ps.slice(i).join('/')
+
+register = (moduleRoot, fn) ->
+  base = null
+  cwd = null
+  paths = []
+
+  transform = (file, encoding, callback) ->
+    base = file.base if base is null
+    cwd = file.cwd if cwd is null
+    paths.push file.path
+    callback()
+
+  flush = (callback) ->
+    fn = fn || (name) -> name
+
+    names = paths.map (p) ->
+      extname = path.extname(p)
+      p.slice 0, -extname.length
+      "./" + fn(afterDir p, moduleRoot)
+
+    # TODO Generalize using a callback.
+    contents = "define(".concat JSON.stringify(names), ", function() {});"
+
+    file = new gutil.File
+      base: base
+      cwd: cwd
+      path: path.join base, "registry.js"
+      contents: new Buffer(contents)
+
+    this.push file
+    this.push null
+    callback()
+
+  through2.obj(transform, flush)
 
 #
 # Tasks
@@ -41,6 +87,11 @@ gulp.task "modules", ->
     .pipe(coffee(bare: true).on("error", gutil.log))
     # .pipe(concat("scripts.js"))
     .pipe(gulp.dest("dist/scripts/modules"))
+
+gulp.task "register", ->
+  gulp.src(templatesSrc)
+  .pipe(register("templates", (name) -> name.slice 0, -4)) # Remove ".hbs"
+  .pipe(gulp.dest(templatesDest).on("error", gutil.log))
 
 gulp.task "server", ->
   connect = require "connect"
@@ -58,9 +109,9 @@ gulp.task "styles", ->
     .pipe(gulp.dest("dist/styles"))
 
 gulp.task "templates", ->
-  gulp.src(templatesPattern)
+  gulp.src(templatesSrc)
     .pipe(handlebars(outputType: "amd"))
-    .pipe(gulp.dest("dist/scripts/modules/templates"))
+    .pipe(gulp.dest(templatesDest))
 
 gulp.task "vendor", ->
   gulp.src(vendorPattern)
@@ -74,8 +125,8 @@ gulp.task "clean", ->
 #
 # The default task boots the development enviroment.
 #
-gulp.task "default", ["assets", "modules", "styles", "templates", "vendor", "server"], ->
+gulp.task "default", ["assets", "modules", "register", "styles", "templates", "vendor", "server"], ->
   gulp.watch assetsPattern, ["assets"]
   gulp.watch modulesPattern, ["modules"]
   gulp.watch stylesPattern, ["styles"]
-  gulp.watch templatesPattern, ["templates"]
+  gulp.watch templatesSrc, ["register", "templates"]
