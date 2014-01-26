@@ -4,8 +4,7 @@
 
 gulp = require "gulp"
 path = require "path"
-through2 = require("through2")
-
+stream = require "stream"
 
 #
 # Plugins
@@ -48,20 +47,21 @@ register = (moduleRoot, nameFn, contentsFn) ->
   contentsFn = contentsFn || (names) -> JSON.stringify(names)
   base = null
   cwd = null
-  paths = []
+  names = []
+  ts = new stream.Transform
+    objectMode: true
 
-  transform = (file, encoding, callback) ->
+  ts._transform = (file, encoding, callback) ->
     base = file.base if base is null
     cwd = file.cwd if cwd is null
-    paths.push file.path
+    p = file.path
+    extname = path.extname(p)
+    p.slice 0, -extname.length
+    name = "./" + nameFn(afterDir p, moduleRoot)
+    names.push name
     callback()
 
-  flush = (callback) ->
-    names = paths.map (p) ->
-      extname = path.extname(p)
-      p.slice 0, -extname.length
-      "./" + nameFn(afterDir p, moduleRoot)
-
+  ts._flush = (callback) ->
     contents = contentsFn(names)
 
     file = new gutil.File
@@ -74,7 +74,7 @@ register = (moduleRoot, nameFn, contentsFn) ->
     this.push null
     callback()
 
-  through2.obj(transform, flush)
+  ts
 
 
 #
