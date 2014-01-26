@@ -4,9 +4,9 @@
 
 path = require "path"
 stream = require "stream"
-File = require("vinyl")
+File = require "vinyl"
 
-  	
+
 #
 # Generate framework module loaders.
 #
