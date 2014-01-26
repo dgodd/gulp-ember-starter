@@ -25,6 +25,7 @@ watch = require "gulp-watch"
 #
 # Configuration TODO move to config.json
 #
+
 assetsPattern = "app/assets/**"
 modulesPattern = "app/**/*.coffee"
 stylesPattern = "app/**/*.styl"
@@ -36,12 +37,15 @@ vendorPattern = "vendor/**"
 #
 # Create registry.js files using a gulp plugin (register).
 #
+
 afterDir = (p, dir) ->
   ps = p.split path.sep
   i = ps.lastIndexOf(dir) + 1
   ps.slice(i).join('/')
 
-register = (moduleRoot, fn) ->
+register = (moduleRoot, nameFn, contentsFn) ->
+  nameFn = nameFn || (name) -> name
+  contentsFn = contentsFn || (names) -> JSON.stringify(names)
   base = null
   cwd = null
   paths = []
@@ -53,15 +57,12 @@ register = (moduleRoot, fn) ->
     callback()
 
   flush = (callback) ->
-    fn = fn || (name) -> name
-
     names = paths.map (p) ->
       extname = path.extname(p)
       p.slice 0, -extname.length
-      "./" + fn(afterDir p, moduleRoot)
+      "./" + nameFn(afterDir p, moduleRoot)
 
-    # TODO Generalize using a callback.
-    contents = "define(".concat JSON.stringify(names), ", function() {});"
+    contents = contentsFn(names)
 
     file = new gutil.File
       base: base
@@ -75,9 +76,11 @@ register = (moduleRoot, fn) ->
 
   through2.obj(transform, flush)
 
+
 #
 # Tasks
 #
+
 gulp.task "assets", ->
   gulp.src(assetsPattern)
     .pipe(gulp.dest("dist"))
@@ -89,9 +92,11 @@ gulp.task "modules", ->
     .pipe(gulp.dest("dist/scripts/modules"))
 
 gulp.task "register", ->
+  removeHBS = (name) -> name.slice 0, -4 # Remove ".hbs"
+  contents = (names) -> "define(".concat JSON.stringify(names), ", function() {});"
   gulp.src(templatesSrc)
-  .pipe(register("templates", (name) -> name.slice 0, -4)) # Remove ".hbs"
-  .pipe(gulp.dest(templatesDest).on("error", gutil.log))
+  .pipe(register "templates", removeHBS, contents)
+  .pipe(gulp.dest(templatesDest))
 
 gulp.task "server", ->
   connect = require "connect"
@@ -125,6 +130,7 @@ gulp.task "clean", ->
 #
 # The default task boots the development enviroment.
 #
+
 gulp.task "default", ["assets", "modules", "register", "styles", "templates", "vendor", "server"], ->
   gulp.watch assetsPattern, ["assets"]
   gulp.watch modulesPattern, ["modules"]
