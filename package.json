@@ -4,23 +4,23 @@
   "description": "Is an Ember.js skeleton project for use with the gulp.js build tool.",
   "author": "Jon Buffington",
   "scripts": {
-    "clean": "gulp --require coffee-script clean",
-    "start": "gulp --require coffee-script",
-    "register": "gulp --require coffee-script register",
-    "prepublish": "gulp --require coffee-script --cwd support"
+    "clean": "gulp --require coffee-script/register clean",
+    "start": "gulp --require coffee-script/register",
+    "register": "gulp --require coffee-script/register register",
+    "prepublish": "gulp --require coffee-script/register --cwd support"
   },
   "dependencies": {
-    "gulp": "~3.5",
-    "coffee-script": "1",
-    "connect": "2",
-    "nib": "1",
-    "gulp-coffee": "~1.2.5",
-    "gulp-concat": "~2.1.7",
-    "gulp-ember-handlebars": "~0.3.1",
-    "gulp-rimraf": "~0.0.8",
-    "gulp-stylus": "~0.0.9",
-    "gulp-util": "~2.2.9",
-    "gulp-watch": "~0.3.4",
-    "vinyl": "~0.2.3"
+    "gulp": ">=3.5",
+    "coffee-script": "~1.7",
+    "connect": "~2",
+    "nib": "~1",
+    "gulp-coffee": ">=1.4.1",
+    "gulp-concat": ">=2.1.7",
+    "gulp-ember-handlebars": ">=0.5",
+    "gulp-rimraf": ">=0.0.8",
+    "gulp-stylus": ">=0.0.9",
+    "gulp-util": ">=2.2.9",
+    "gulp-watch": ">=0.3.4",
+    "vinyl": ">=0.2.3"
   }
 }
