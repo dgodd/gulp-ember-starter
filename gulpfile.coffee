@@ -40,7 +40,7 @@ gulp.task "assets", ->
 
 gulp.task "modules", ->
   gulp.src([modulesPattern])
-  .pipe(coffee(bare: true).on("error", gutil.log))
+  .pipe(coffee(bare: true, sourceMap: true).on("error", gutil.log))
   # .pipe(concat("scripts.js"))
   .pipe(gulp.dest("build/scripts/modules"))
 
@@ -55,6 +55,7 @@ gulp.task "server", ->
   connect = require "connect"
   server = connect()
   .use(connect.logger("dev"))
+  .use("/scripts/modules", connect.static(__dirname + "/app"))
   .use("/", connect.static(__dirname + "/build"))
   http = require "http"
   http.createServer(server).listen(3333)
