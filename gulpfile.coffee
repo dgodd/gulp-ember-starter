@@ -27,7 +27,7 @@ assetsPattern = "app/assets/**"
 modulesPattern = "app/**/*.coffee"
 stylesPattern = "app/**/*.styl"
 templatesSrc = "app/templates/**/*.hbs"
-templatesDest = "dist/scripts/modules/templates"
+templatesDest = "build/scripts/modules/templates"
 vendorPattern = "vendor/**"
 
 
@@ -36,13 +36,13 @@ vendorPattern = "vendor/**"
 #
   
 gulp.task "assets", ->
-  gulp.src(assetsPattern).pipe(gulp.dest("dist"))
+  gulp.src(assetsPattern).pipe(gulp.dest("build"))
 
 gulp.task "modules", ->
   gulp.src([modulesPattern])
   .pipe(coffee(bare: true).on("error", gutil.log))
   # .pipe(concat("scripts.js"))
-  .pipe(gulp.dest("dist/scripts/modules"))
+  .pipe(gulp.dest("build/scripts/modules"))
 
 gulp.task "register-templates", ->
   rename = (name) -> name.slice 0, -4 # Remove ".hbs"
@@ -55,7 +55,7 @@ gulp.task "server", ->
   connect = require "connect"
   server = connect()
   .use(connect.logger("dev"))
-  .use("/", connect.static(__dirname + "/dist"))
+  .use("/", connect.static(__dirname + "/build"))
   http = require "http"
   http.createServer(server).listen(3333)
   gutil.log "Development server listening on http://localhost:3333."
@@ -64,7 +64,7 @@ gulp.task "styles", ->
   gulp.src([stylesPattern])
   .pipe(stylus(use: ["nib"]))
   .pipe(concat("app.css"))
-  .pipe(gulp.dest("dist/styles"))
+  .pipe(gulp.dest("build/styles"))
 
 gulp.task "templates", ["register-templates"], ->
   gulp.src(templatesSrc)
@@ -72,11 +72,11 @@ gulp.task "templates", ["register-templates"], ->
   .pipe(gulp.dest(templatesDest))
 
 gulp.task "vendor", ->
-  gulp.src(vendorPattern).pipe(gulp.dest("dist"))
+  gulp.src(vendorPattern).pipe(gulp.dest("build"))
 
 gulp.task "clean", ->
-  gulp.src("dist").pipe(rimraf())
-  gulp.src("support/lib").pipe(rimraf())
+  gulp.src("build", read: false).pipe(rimraf())
+  gulp.src("support/lib", read: false).pipe(rimraf())
 
 
 #
