@@ -17,10 +17,10 @@ module.exports = (moduleRoot, fileName, nameFn, contentsFn) ->
   base = null
   cwd = null
   names = []
-  
+
   ts = new stream.Transform
     objectMode: true
-    
+
   truncate = (p) ->
     ps = p.split path.sep
     i = ps.lastIndexOf(moduleRoot) + 1
