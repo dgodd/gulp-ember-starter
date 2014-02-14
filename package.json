@@ -10,10 +10,10 @@
     "prepublish": "gulp --require coffee-script/register --cwd support"
   },
   "dependencies": {
-    "gulp": ">=3.5",
-    "coffee-script": "~1.7",
-    "connect": "~2",
-    "nib": "~1",
+    "gulp": ">=3.5 <4.0",
+    "coffee-script": ">=1.7 <2",
+    "connect": ">= 2 <3",
+    "nib": ">= 1 <2",
     "gulp-coffee": ">=1.4.1",
     "gulp-concat": ">=2.1.7",
     "gulp-ember-handlebars": ">=0.5",
