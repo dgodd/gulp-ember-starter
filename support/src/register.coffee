@@ -11,7 +11,7 @@ File = require "vinyl"
 # Generate framework module loaders.
 #
 
-module.exports = (moduleRoot, fileName, nameFn, contentsFn) ->
+module.exports = (moduleRoot, fileName, nameFn, contentsFn, defaultBase) ->
   nameFn ||= (name) -> name
   contentsFn ||= (names) -> JSON.stringify(names)
   base = null
@@ -40,14 +40,16 @@ module.exports = (moduleRoot, fileName, nameFn, contentsFn) ->
     	callback()
 
   ts._flush = (callback) ->
-    	# Turn names into the file's content.
-    	contents = contentsFn(names)
-    	# Wrap the content in a file and push it into the stream.
-    	this.push new File
-    	  base: base
-    	  cwd: cwd
-    	  path: path.join base, fileName
-    	  contents: new Buffer(contents)
+    # Handle empty transformations.
+    base ||= defaultBase
+    # Turn names into the file's content.
+    contents = contentsFn(names)
+    # Wrap the content in a file and push it into the stream.
+    this.push new File
+      base: base
+      cwd: cwd
+      path: path.join base, fileName
+      contents: new Buffer(contents)
     	# Done.
     	callback()
 
